@@ -12,6 +12,10 @@ const PostSchema = new Schema({
   },
   image: {
     type: String
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
   }
 });
 

@@ -4,6 +4,8 @@ const config = require('./config');
 const cors = require('cors');
 
 const users = require('./app/users');
+const posts = require('./app/posts');
+const comments = require('./app/comments');
 
 const app = express();
 
@@ -22,6 +24,7 @@ db.once('open', () => {
 
   app.use('/posts', posts());
   app.use('/users', users());
+  app.use('/comments', comments());
 
   app.listen(port, () => {
     console.log(`Server started on ${port} port!`);

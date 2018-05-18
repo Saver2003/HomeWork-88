@@ -1,27 +1,10 @@
 const express = require('express');
-const multer = require('multer');
-const nanoid = require('nanoid');
-const path = require('path');
 
-const Post = require('../models/Post');
 const auth = require('../auth');
-const config = require('../config');
 const User = require('../models/User');
-
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, config.uploadPath);
-  },
-  filename: (req, file, cb) => {
-    cb(null, nanoid() + path.extname(file.originalname));
-  }
-});
-
-const upload = multer({storage});
+const Post = require('../models/Post');
 
 const router = express.Router();
-
 
 const createRouter = () => {
   router.get('/', (req, res) => {
@@ -30,22 +13,21 @@ const createRouter = () => {
       .catch(() => res.sendStatus(500))
   });
 
-  router.post('/', auth, upload.single('image'), async (req, res) => {
+  router.post('/', auth, async (req, res) => {
     const token = req.get('Token');
 
     const user = await User.findOne({token});
     if (!user) {
       res.status(401).send({error: 'user not authorised!'})
     } else {
-      const postData = {
+      const commentData = {
         user: user._id,
         title: req.body.title,
         description: req.body.description,
-        comment: req.body.comment
       };
-      const post = new Post(postData);
-      post.save()
-        .then(post => res.send(post))
+      const comment = new Post(commentData);
+      comment.save()
+        .then(comment => res.send(comment))
         .catch(error => res.status(400).send(error));
     }
   });
