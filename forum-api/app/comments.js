@@ -2,15 +2,17 @@ const express = require('express');
 
 const auth = require('../auth');
 const User = require('../models/User');
-const Post = require('../models/Post');
+const Comment = require('../models/Comment');
 
 const router = express.Router();
 
 const createRouter = () => {
   router.get('/', (req, res) => {
-    Post.find()
-      .then(results => res.send(results.reverse()))
-      .catch(() => res.sendStatus(500))
+    if (req.query.post) {
+      Comment.find({post: req.query.post})
+        .then(results => res.send(results.reverse()))
+        .catch(() => res.sendStatus(500))
+    }
   });
 
   router.post('/', auth, async (req, res) => {
@@ -23,6 +25,7 @@ const createRouter = () => {
       const commentData = {
         user: user._id,
         title: req.body.title,
+        post: req.body.post,
         description: req.body.description,
       };
       const comment = new Post(commentData);

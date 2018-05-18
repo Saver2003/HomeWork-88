@@ -34,19 +34,31 @@ const createRouter = () => {
     const token = req.get('Token');
 
     const user = await User.findOne({token});
+    const data = req.body;
     if (!user) {
       res.status(401).send({error: 'user not authorised!'})
     } else {
-      const postData = {
-        user: user._id,
-        title: req.body.title,
-        description: req.body.description,
-        comment: req.body.comment
-      };
-      const post = new Post(postData);
-      post.save()
-        .then(post => res.send(post))
-        .catch(error => res.status(400).send(error));
+
+      if (req.file) {
+        data.photo = req.file.filename;
+      } else {
+        data.photo = null;
+      }
+
+      if (data.image || data.description) {
+        const postData = {
+          user: user._id,
+          title: req.body.title,
+          description: req.body.description,
+        };
+
+        const post = new Post(postData);
+        post.save()
+          .then(post => res.send(post))
+          .catch(error => res.status(400).send(error));
+      } else {
+        res.status(400).send({error: 'description or image is required!'})
+      }
     }
   });
 
