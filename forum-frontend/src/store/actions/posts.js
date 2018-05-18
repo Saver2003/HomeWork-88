@@ -13,14 +13,15 @@ export const fetchPosts = () => {
   }
 };
 
-export const addPostSuccess = post => {
-  return {type: ADD_POST_SUCCESS, post};
-};
 
-export const  addPost = (id, token) => {
-  return dispatch => {
-    return axios.post('/posts', {post: id}, {headers: {"Token": token}}).then(
-      response => dispatch(addPostSuccess())
+
+export const addPost = (id) => {
+  return (dispatch, getState) => {
+    for (let item of id.entries()) {
+      console.log(item)
+    }
+    return axios.post('/posts', id, {headers: {"Token": getState().users.user.token}}).then(
+      response => console.log(response.data)
     )
   }
 };

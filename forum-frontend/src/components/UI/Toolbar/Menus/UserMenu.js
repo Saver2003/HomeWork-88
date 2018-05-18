@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import {MenuItem, Nav, NavDropdown} from "react-bootstrap";
+import {Nav, NavItem} from "react-bootstrap";
 import {LinkContainer} from "react-router-bootstrap";
 
 const UserMenu = ({user, logout}) => {
@@ -10,15 +10,19 @@ const UserMenu = ({user, logout}) => {
   );
 
   return (
-    <Nav pullRight>
-      <NavDropdown id='user-menu' title={navTitle}>
-        <LinkContainer to="/profile">
-          <MenuItem>Edit profile</MenuItem>
-        </LinkContainer>
-        <MenuItem divider/>
-        <MenuItem onClick={logout}>Logout</MenuItem>
-      </NavDropdown>
+    <Nav bsStyle="pills" activeKey={1} pullRight>
+      <NavItem >{navTitle}</NavItem>
+      <LinkContainer to="/newpost">
+      <NavItem eventKey={1} href="/home">
+        Add new post
+      </NavItem>
+      </LinkContainer>
+      <NavItem onClick={logout} eventKey={2}>
+        Logout
+      </NavItem>
     </Nav>
+
+
   )
 };
 

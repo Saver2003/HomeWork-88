@@ -1,9 +1,8 @@
 import React, {Component, Fragment} from 'react';
 import {PageHeader} from "react-bootstrap";
-import {Link} from "react-router-dom";
 
 import {connect} from "react-redux";
-import {addPost, fetchPosts} from "../../store/actions/posts";
+import {fetchPosts} from "../../store/actions/posts";
 import PostList from "../../components/PostList/PostList";
 
 
@@ -28,7 +27,6 @@ class Posts extends Component {
             description={post.description}
             image={post.image}
             user={post.user.username}
-            click={() => this.props.addPost(post._id, this.props.user.token)}
           />
         ))}
       </Fragment>
@@ -46,7 +44,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     fetchPosts: (id) => dispatch(fetchPosts(id)),
-    addPost: (post, token) => dispatch(addPost(post, token))
+
   }
 };
 

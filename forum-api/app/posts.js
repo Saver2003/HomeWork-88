@@ -30,7 +30,7 @@ const createRouter = () => {
       .catch(() => res.sendStatus(500))
   });
 
-  router.post('/', auth, upload.single('image'), async (req, res) => {
+  router.post('/', [auth, upload.single('image')], async (req, res) => {
     const token = req.get('Token');
 
     const user = await User.findOne({token});
@@ -40,18 +40,19 @@ const createRouter = () => {
     } else {
 
       if (req.file) {
-        data.photo = req.file.filename;
+        data.image = req.file.filename;
       } else {
-        data.photo = null;
+        data.image = null;
       }
 
       if (data.image || data.description) {
+        console.log(req.body)
         const postData = {
           user: user._id,
           title: req.body.title,
           description: req.body.description,
-        };
-
+          image: data.image
+        }
         const post = new Post(postData);
         post.save()
           .then(post => res.send(post))

@@ -27,6 +27,22 @@ const createRouter = () => {
     return res.send({message: 'User and password correct!', user});
   });
 
+  router.delete('/sessions', async (req, res) => {
+    const token = req.get('Token');
+    const success = {message: 'Logout success!'};
+
+    if (!token) return res.send(success);
+
+    const user = await User.findOne({token});
+
+    if (!user) return res.send(success);
+
+    user.generateToken();
+    await user.save();
+
+    return res.send(success);
+  });
+
   return router;
 };
 
