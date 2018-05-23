@@ -13,9 +13,12 @@ const CommentSchema = new Schema({
     ref: 'Post',
     required: true
   },
-  description: {
+  comment: {
     type: String,
     required: true
+  },
+  dateTime: {
+    type: String
   }
 });
 

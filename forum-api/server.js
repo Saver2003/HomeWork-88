@@ -26,6 +26,7 @@ db.once('open', () => {
   app.use('/users', users());
   app.use('/comments', comments());
 
+
   app.listen(port, () => {
     console.log(`Server started on ${port} port!`);
   })

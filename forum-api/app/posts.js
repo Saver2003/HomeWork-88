@@ -8,7 +8,6 @@ const auth = require('../auth');
 const config = require('../config');
 const User = require('../models/User');
 
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, config.uploadPath);
@@ -22,11 +21,16 @@ const upload = multer({storage});
 
 const router = express.Router();
 
-
 const createRouter = () => {
   router.get('/', (req, res) => {
-    Post.find()
+    Post.find().populate({path: 'user', select: 'username'})
       .then(results => res.send(results.reverse()))
+      .catch(() => res.sendStatus(500))
+  });
+
+  router.get('/:id', (req, res) => {
+    Post.findOne({_id: req.params.id}).populate({path: 'user', select: 'username'})
+      .then(results => res.send(results))
       .catch(() => res.sendStatus(500))
   });
 
@@ -35,6 +39,7 @@ const createRouter = () => {
 
     const user = await User.findOne({token});
     const data = req.body;
+    console.log(req.body);
     if (!user) {
       res.status(401).send({error: 'user not authorised!'})
     } else {
@@ -46,13 +51,13 @@ const createRouter = () => {
       }
 
       if (data.image || data.description) {
-        console.log(req.body)
         const postData = {
           user: user._id,
           title: req.body.title,
           description: req.body.description,
-          image: data.image
-        }
+          image: data.image,
+          dateTime: new Date()
+        };
         const post = new Post(postData);
         post.save()
           .then(post => res.send(post))

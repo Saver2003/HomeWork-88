@@ -9,7 +9,7 @@ class NewPost extends Component {
   state = {
     title: '',
     description: '',
-    image: ''
+    image: '',
   };
 
   inputChangeHandler = event => {
@@ -30,6 +30,11 @@ class NewPost extends Component {
     this.props.addPost(formData);
   };
 
+  fileChangeHandler = event => {
+    this.setState({
+      [event.target.name]: event.target.files[0]
+    });
+  };
 
   render() {
     return(
@@ -49,8 +54,28 @@ class NewPost extends Component {
 
           <FormGroup controlId="formControlsTextarea">
             <ControlLabel>Textarea</ControlLabel>
-            <FormControl componentClass="textarea" name="description" placeholder="textarea" onChange={this.inputChangeHandler} />
+            <FormControl
+              componentClass="textarea"
+              name="description"
+              placeholder="Enter description"
+              onChange={this.inputChangeHandler}
+            />
           </FormGroup>
+
+          <FormGroup controlId="productImage">
+            <Col componentClass={ControlLabel} sm={2}>
+              Image
+            </Col>
+            <Col sm={10}>
+              <FormControl
+                type="file"
+                name="image"
+                onChange={this.fileChangeHandler}
+              />
+            </Col>
+          </FormGroup>
+
+
           <Button type='submit' style={{float: 'right', marginRight: '50px'}}><strong>Add Post</strong></Button>
 
         </Form>

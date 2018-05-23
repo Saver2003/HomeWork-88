@@ -8,27 +8,33 @@ import PostList from "../../components/PostList/PostList";
 
 class Posts extends Component {
   componentDidMount() {
-    this.props.fetchPosts(this.props.match.params.id);
+    this.props.fetchPosts(this.props);
   }
 
-  render () {
-    return(
+  render() {
+    return (
       <Fragment>
         <PageHeader>
           <p>
             Posts
           </p>
         </PageHeader>
-        {this.props.posts.map(post => (
-          <PostList
-            key={post._id}
-            id={post._id}
-            title={post.title}
-            description={post.description}
-            image={post.image}
-            user={post.user.username}
-          />
-        ))}
+        {this.props.posts.map(post => {
+          // console.log(this.props.posts)
+            return (
+              <PostList
+                key={post._id}
+                id={post._id}
+                title={post.title}
+                // description={post.description}
+                image={post.image}
+                user={post.user.username}
+                dateTime={post.dateTime}
+
+              />
+            )
+          }
+        )}
       </Fragment>
     );
   }

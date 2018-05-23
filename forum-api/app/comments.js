@@ -9,30 +9,24 @@ const router = express.Router();
 const createRouter = () => {
   router.get('/', (req, res) => {
     if (req.query.post) {
-      Comment.find({post: req.query.post})
+      Comment.find({post: req.query.post}).populate('user')
         .then(results => res.send(results.reverse()))
         .catch(() => res.sendStatus(500))
     }
   });
 
   router.post('/', auth, async (req, res) => {
-    const token = req.get('Token');
-
-    const user = await User.findOne({token});
-    if (!user) {
-      res.status(401).send({error: 'user not authorised!'})
-    } else {
       const commentData = {
-        user: user._id,
-        title: req.body.title,
+        user: req.user._id,
         post: req.body.post,
-        description: req.body.description,
+        comment: req.body.comment,
+        dateTime: new Date()
       };
-      const comment = new Post(commentData);
+      const comment = new Comment(commentData);
       comment.save()
         .then(comment => res.send(comment))
         .catch(error => res.status(400).send(error));
-    }
+
   });
 
   return router;

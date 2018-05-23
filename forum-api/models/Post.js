@@ -16,6 +16,10 @@ const PostSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User'
+  },
+  dateTime: {
+    type: String,
+    required: true
   }
 });
 
